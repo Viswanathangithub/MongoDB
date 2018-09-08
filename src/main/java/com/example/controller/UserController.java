@@ -32,7 +32,7 @@ public class UserController implements ErrorController{
 	@RequestMapping(value="/all", method=RequestMethod.GET)
 	public List<UserDetails> getUsers() {
 		List<UserDetails> userList = userRepository.findAll();
-		LOGGER.info("User List", userList);
+		LOGGER.info("User List" +userList.toString());
 		return userList;
 	}
 	

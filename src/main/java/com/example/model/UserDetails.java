@@ -1,11 +1,17 @@
 package com.example.model;
 
+import java.io.Serializable;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="UserDetails")
-public class UserDetails {
+public class UserDetails implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2L;
 	@Id
 	private String id;
 	private String userId;

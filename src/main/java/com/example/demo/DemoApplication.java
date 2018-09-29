@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import com.example.model.ApplicationProperties;
@@ -11,6 +12,7 @@ import com.example.model.ApplicationProperties;
 @SpringBootApplication
 @ComponentScan(basePackages= {"com.example"})
 @EnableMongoRepositories(basePackages= {"com.example.repository"})
+@EnableCaching
 public class DemoApplication implements CommandLineRunner {
 
 	@Autowired

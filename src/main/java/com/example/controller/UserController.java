@@ -6,11 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.UserDao;
@@ -30,6 +32,7 @@ public class UserController implements ErrorController{
 	private UserDao userDaoImpl;
 
 	@RequestMapping(value="/all", method=RequestMethod.GET)
+	@Cacheable(value="findAllCache")
 	public List<UserDetails> getUsers() {
 		List<UserDetails> userList = userRepository.findAll();
 		LOGGER.info("User List" +userList.toString());
@@ -46,8 +49,8 @@ public class UserController implements ErrorController{
 		return userRepository.save(user);
 	}
 	
-	@RequestMapping(value="/address/{addressName}",method=RequestMethod.GET)
-	public List<UserDetails> saveUser(@PathVariable (required=true) String addressName) {
+	@RequestMapping(value="/address",method=RequestMethod.GET)
+	public List<UserDetails> getByAddress(@RequestParam (required=true) String addressName) {
 		return userDaoImpl.getUserByAddress(addressName);
 	}
 	

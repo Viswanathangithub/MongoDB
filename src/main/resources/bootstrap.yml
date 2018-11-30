@@ -1,0 +1,28 @@
+spring:
+   application:
+      name: config-client
+   cloud:
+      config:
+         uri: http://localhost:8888
+      enabled: true
+   data:
+      mongodb:
+         host: localhost
+         port: 27017
+         database: UserDetails
+
+logging:
+   level:
+      org:
+         springframework:
+            data: debug 
+server:
+   port: 8102       
+
+management:
+   endpoints:
+      web:
+         exposure:
+            include: refresh
+   security:
+      enabled: false

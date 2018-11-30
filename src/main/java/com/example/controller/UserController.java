@@ -5,8 +5,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ import com.example.model.UserDetails;
 import com.example.repository.UserRepository;
 
 @RestController
+@RefreshScope
 @RequestMapping(value="/users")
 public class UserController implements ErrorController{
 
@@ -27,9 +30,17 @@ public class UserController implements ErrorController{
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private UserDao userDaoImpl;
+
+	@Value("${message: Config Server not working}")
+	private String message;
+
+	@RequestMapping(value="/message", method=RequestMethod.GET)
+	public String getMessage() {
+		return message;
+	}
 
 	@RequestMapping(value="/all", method=RequestMethod.GET)
 	@Cacheable(value="findAllCache")
@@ -38,22 +49,22 @@ public class UserController implements ErrorController{
 		LOGGER.info("User List" +userList.toString());
 		return userList;
 	}
-	
+
 	@RequestMapping(value="/{userId}", method=RequestMethod.GET)
 	public String getNameById(@PathVariable (required=true) String userId) {
 		return userRepository.findNameById(userId);
 	}
-	
+
 	@RequestMapping(value="/addUser",method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public UserDetails saveUser(@RequestBody UserDetails user) {
 		return userRepository.save(user);
 	}
-	
+
 	@RequestMapping(value="/address",method=RequestMethod.GET)
 	public List<UserDetails> getByAddress(@RequestParam (required=true) String addressName) {
 		return userDaoImpl.getUserByAddress(addressName);
 	}
-	
+
 
 	@Override
 	public String getErrorPath() {

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.UserDao;
+import com.example.exception.UserException;
 import com.example.model.UserDetails;
 import com.example.repository.UserRepository;
 
@@ -46,8 +47,12 @@ public class UserController implements ErrorController{
 	@Cacheable(value="findAllCache")
 	public List<UserDetails> getUsers() {
 		List<UserDetails> userList = userRepository.findAll();
-		LOGGER.info("User List" +userList.toString());
-		return userList;
+		if(userList.size()<0) {
+			throw new UserException("No Users Available");
+		} else {
+			LOGGER.info("User List" +userList.toString());
+			return userList;
+		}
 	}
 
 	@RequestMapping(value="/{userId}", method=RequestMethod.GET)
